@@ -5,8 +5,18 @@
 The project is built using a four-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, a code review agent reviews the diff before it ships, and a deployment agent validates each increment against a local Kubernetes cluster.
 
 ```
-Coordinator → [task] → Coding Agent → [diff] → Review Agent → [verdict] → Deployment Agent → [status] → Coordinator
+Coordinator → [task] → Coding Agent → [diff + task] → Review Agent → [verdict] → Coordinator
+                                                                                       │
+                                                                ┌──────────────────────┤
+                                                                │ APPROVE              │ REQUEST_CHANGES / REJECT
+                                                                ▼                      ▼
+                                                       Deployment Agent          re-issue / BLOCKED.md
+                                                                │
+                                                                ▼
+                                                           Coordinator
 ```
+
+**Key rule:** The review agent never talks directly to the deployment agent. The coordinator gates all transitions. Deployment only happens after an explicit `APPROVE` verdict.
 
 The coordinator is **stateless between iterations**. Each coordinator session is short: read state from disk, decide the next action, write updated state to disk, exit. The loop is driven externally (by the user or a script), not by the coordinator's context. This keeps the coordinator's context window small regardless of how long the project runs.
 
