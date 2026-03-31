@@ -2,10 +2,10 @@
 
 ## Overview
 
-The project is built using a three-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, and a deployment agent validates each increment against a local Kubernetes cluster.
+The project is built using a four-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, a code review agent reviews the diff before it ships, and a deployment agent validates each increment against a local Kubernetes cluster.
 
 ```
-Coordinator → [task] → Coding Agent → [code] → Deployment Agent → [status] → Coordinator
+Coordinator → [task] → Coding Agent → [diff] → Review Agent → [verdict] → Deployment Agent → [status] → Coordinator
 ```
 
 The coordinator is **stateless between iterations**. Each coordinator session is short: read state from disk, decide the next action, write updated state to disk, exit. The loop is driven externally (by the user or a script), not by the coordinator's context. This keeps the coordinator's context window small regardless of how long the project runs.
@@ -17,10 +17,11 @@ The coordinator is **stateless between iterations**. Each coordinator session is
 **Each invocation follows this logic:**
 1. Read `docs/agents/` and state files (`progress.md`, `todo.md`)
 2. If `todo.md` does not exist — run the orientation step (see below) and generate it, then exit
-3. If the last task in `progress.md` failed and is within retry budget — re-issue it with failure context
-4. If the last task passed — mark it done in `todo.md`, issue the next pending task
-5. If `todo.md` has no pending tasks — verify the definition of done and write `DONE.md` if all conditions are met
-6. Write all state changes to disk before exiting
+3. If the last review returned `REQUEST_CHANGES` and is within retry budget — re-issue the task to the coding agent with the review issues as context
+4. If the last deployment failed and is within retry budget — re-issue the task to the coding agent with the failure context
+5. If the last deployment passed — mark it done in `todo.md`, issue the next pending task
+6. If `todo.md` has no pending tasks — verify the definition of done and write `DONE.md` if all conditions are met
+7. Write all state changes to disk before exiting
 
 **Orientation step (first invocation only):**
 1. Read all files in `docs/agents/`
@@ -94,8 +95,29 @@ If a task required retries, every attempt must be logged with its failure reason
 - Read existing code before modifying anything
 - Do not add features not requested in the task
 - Run `./gradlew test` before reporting done — do not hand off if tests fail
-- Commit all changes with a meaningful message before reporting done
+- Do not commit — the review agent decides whether the diff is committed
 - When done, report back a summary of what changed and any open questions for the coordinator
+
+## Code Review Agent
+
+**Responsibility:** Receive the task handoff and the git diff from the coding agent. Review the diff and decide: approve (coordinator proceeds to deployment), request changes (coordinator re-issues to coding agent), or reject (coordinator escalates to user).
+
+**Each review runs in a fresh agent session.**
+
+**Review checklist:**
+- **Scope** — does the diff touch only files relevant to the task? Flag any out-of-scope changes
+- **Correctness** — does the implementation match the goal in the task handoff?
+- **Consistency** — does the code follow conventions established in the rest of the codebase?
+- **Security** — flag any unsafe deserialization, command injection via config, or log injection risks
+- **Tests** — are the changes covered by tests? New logic without tests is a change request
+- **No hardcoded config** — all ports, addresses, and topology must come from config, not code
+
+**Verdicts:**
+- `APPROVE` — commit the diff and proceed to deployment
+- `REQUEST_CHANGES` — return specific required changes to the coordinator; counts as a retry attempt
+- `REJECT` — unresolvable issue; coordinator escalates to user via `BLOCKED.md`
+
+On `APPROVE`, the review agent commits the diff with a meaningful message and reports done.
 
 ## Deployment Agent
 
@@ -140,10 +162,26 @@ Acceptance: <what the deployment agent should verify>
 Attempt: <1-6>
 ```
 
+Coding Agent → Review Agent:
+```
+Task: <short title>
+Goal: <one sentence>
+Diff: <output of git diff --staged>
+Changed files: <comma-separated list>
+Open questions: <any unresolved questions, or "none">
+```
+
+Review Agent → Coordinator:
+```
+Verdict: <APPROVE|REQUEST_CHANGES|REJECT>
+Task: <short title>
+Issues: <bulleted list of required changes, or "none">
+```
+
 Deployment Agent → Coordinator:
 ```
 Status: <PASS|FAIL>
 Task: <short title>
 Details: <what was verified or what failed>
-Logs: <relevant pod logs or kubectl output, if failed>
+Logs: <see logs/<task-title>.log>
 ```
