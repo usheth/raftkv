@@ -77,11 +77,12 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 ```
 ## <task title>
 - Started: <timestamp>
-- Attempt <n>: <PASS|FAIL> — <one sentence reason>
+- Review <n>: <APPROVE|REQUEST_CHANGES|REJECT> — <one sentence reason>
+- Deployment <n>: <PASS|FAIL> — <one sentence reason>
 - Completed: <timestamp>
 - Time taken: <duration>
 ```
-If a task required retries, every attempt must be logged with its failure reason so patterns are visible.
+Every review verdict and deployment attempt must be logged. If a task required retries, the full sequence of events must be visible in the history.
 
 **Retry budgets:** Review retries and deployment retries are tracked separately.
 - A task may receive at most 6 `REQUEST_CHANGES` verdicts before the coordinator escalates to the user
