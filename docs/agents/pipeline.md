@@ -25,6 +25,12 @@ Relevant docs: <list of docs/agents/ files to load>
 Acceptance: <what the deployment agent should verify>
 ```
 
+**State files:** The coordinator maintains two files at the repo root:
+- `progress.md` — append-only log of completed tasks, their outcomes, and deployment results
+- `todo.md` — the current ordered task list; update it as tasks are added, completed, or revised
+
+Both files must be kept up to date throughout the pipeline run. Update `progress.md` after each deployment result and `todo.md` before handing off each new task.
+
 **On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or escalates to the user.
 
 ## Coding Agent
