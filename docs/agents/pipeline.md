@@ -34,10 +34,11 @@ The coordinator is **stateless between iterations**. Each coordinator session is
 7. Write all state changes to disk before exiting
 
 **Orientation step (first invocation only):**
-1. Read all files in `docs/agents/`
-2. Survey the existing codebase — what modules exist, what is already implemented, what is missing
-3. Generate `todo.md` with the full ordered task list
-4. Exit — do not issue the first task yet; that happens on the next invocation
+1. Run `scripts/preflight.sh` — if it fails, write `BLOCKED.md` describing which check failed and exit. Do not proceed.
+2. Read all files in `docs/agents/`
+3. Survey the existing codebase — what modules exist, what is already implemented, what is missing
+4. Generate `todo.md` with the full ordered task list
+5. Exit — do not issue the first task yet; that happens on the next invocation
 
 This prevents creating tasks for work already done and ensures dependencies are understood before decomposition.
 
