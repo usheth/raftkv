@@ -18,6 +18,8 @@ A distributed key-value store with Raft consensus replication and consistent has
 | gRPC transport layer | `docs/agents/transport.md` |
 | Test harness design | `docs/agents/harness.md` |
 | Module and package layout | `docs/agents/structure.md` |
+| Agent pipeline (coordinator, coder, deployer) | `docs/agents/pipeline.md` |
+| Docker and Kubernetes deployment | `docs/agents/deployment.md` |
 
 ## Key Constraints
 
