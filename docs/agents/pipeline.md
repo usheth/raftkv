@@ -5,18 +5,18 @@
 The project is built using a four-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, a code review agent reviews the diff before it ships, and a deployment agent validates each increment against a local Kubernetes cluster.
 
 ```
-Coordinator → [task] → Coding Agent → [diff + task] → Review Agent → [verdict] → Coordinator
-                                                                                       │
-                                                                ┌──────────────────────┤
-                                                                │ APPROVE              │ REQUEST_CHANGES / REJECT
-                                                                ▼                      ▼
-                                                       Deployment Agent          re-issue / BLOCKED.md
-                                                                │
-                                                                ▼
-                                                           Coordinator
+Coordinator → [task] → Coding Agent → [diff] → Coordinator → [diff + docs] → Review Agent → [verdict] → Coordinator
+                                                                                                                │
+                                                                                         ┌──────────────────────┤
+                                                                                         │ APPROVE              │ REQUEST_CHANGES / REJECT
+                                                                                         ▼                      ▼
+                                                                                Deployment Agent          re-issue / BLOCKED.md
+                                                                                         │
+                                                                                         ▼
+                                                                                     Coordinator
 ```
 
-**Key rule:** The review agent never talks directly to the deployment agent. The coordinator gates all transitions. Deployment only happens after an explicit `APPROVE` verdict.
+**Key rule:** All transitions are gated by the coordinator. The coding agent hands its diff back to the coordinator, which then assembles the full review handoff (diff + relevant docs) and passes it to the review agent. Deployment only happens after an explicit `APPROVE` verdict. On deployment failure, the coordinator `git revert`s the approved commit before re-issuing the task.
 
 The coordinator is **stateless between iterations**. Each coordinator session is short: read state from disk, decide the next action, write updated state to disk, exit. The loop is driven externally (by the user or a script), not by the coordinator's context. This keeps the coordinator's context window small regardless of how long the project runs.
 
@@ -27,8 +27,8 @@ The coordinator is **stateless between iterations**. Each coordinator session is
 **Each invocation follows this logic:**
 1. Read `docs/agents/` and state files (`progress.md`, `todo.md`)
 2. If `todo.md` does not exist — run the orientation step (see below) and generate it, then exit
-3. If the last review returned `REQUEST_CHANGES` and is within retry budget — re-issue the task to the coding agent with the review issues as context
-4. If the last deployment failed and is within retry budget — re-issue the task to the coding agent with the failure context
+3. If the last review returned `REQUEST_CHANGES` and is within review retry budget — re-issue the task to the coding agent with the review issues as context
+4. If the last deployment failed and is within deployment retry budget — `git revert` the approved commit, then re-issue the task to the coding agent with the failure context
 5. If the last deployment passed — mark it done in `todo.md`, issue the next pending task
 6. If `todo.md` has no pending tasks — verify the definition of done and write `DONE.md` if all conditions are met
 7. Write all state changes to disk before exiting
@@ -83,7 +83,10 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 ```
 If a task required retries, every attempt must be logged with its failure reason so patterns are visible.
 
-**Retry budget:** A task may be re-issued at most 6 times. On the 7th failure the coordinator halts the pipeline and escalates to the user.
+**Retry budgets:** Review retries and deployment retries are tracked separately.
+- A task may receive at most 6 `REQUEST_CHANGES` verdicts before the coordinator escalates to the user
+- A task may fail deployment at most 6 times before the coordinator escalates to the user
+- The two counters are independent — exhausting one does not affect the other
 
 **Human escalation:** Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed from the user. The pipeline stops until `BLOCKED.md` is deleted.
 
@@ -114,9 +117,11 @@ If a task required retries, every attempt must be logged with its failure reason
 
 **Each review runs in a fresh agent session.**
 
+**The coordinator passes the same `Relevant docs` list to the review agent as it passed to the coding agent.** The review agent must load these before reviewing — correctness and consistency can only be judged against the architectural decisions in those docs.
+
 **Review checklist:**
 - **Scope** — does the diff touch only files relevant to the task? Flag any out-of-scope changes
-- **Correctness** — does the implementation match the goal in the task handoff?
+- **Correctness** — does the implementation match the goal in the task handoff and the decisions in the relevant docs?
 - **Consistency** — does the code follow conventions established in the rest of the codebase?
 - **Security** — flag any unsafe deserialization, command injection via config, or log injection risks
 - **Tests** — are the changes covered by tests? New logic without tests is a change request
@@ -172,13 +177,14 @@ Acceptance: <what the deployment agent should verify>
 Attempt: <1-6>
 ```
 
-Coding Agent → Review Agent:
+Coordinator → Review Agent:
 ```
 Task: <short title>
 Goal: <one sentence>
-Diff: <output of git diff --staged>
+Relevant docs: <comma-separated list — same as passed to coding agent>
+Diff: <output of git diff HEAD>
 Changed files: <comma-separated list>
-Open questions: <any unresolved questions, or "none">
+Open questions: <any unresolved questions from coding agent, or "none">
 ```
 
 Review Agent → Coordinator:
