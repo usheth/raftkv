@@ -22,7 +22,7 @@ echo "========================"
 check "Docker daemon running"        "docker info"
 check "minikube cluster running"     "minikube status | grep -q 'host: Running'"
 check "kubectl can reach cluster"    "kubectl cluster-info"
-check "Java 21+"                     "java --version 2>&1 | grep -qE 'version \"2[1-9]|version \"[3-9][0-9]'"
+check "Java 21+"                     "java -version 2>&1 | grep -qE 'version \"2[1-9]|version \"[3-9][0-9]'"
 check "Gradle 8+"                    "gradle --version 2>&1 | grep -qE 'Gradle [8-9]|Gradle [1-9][0-9]'"
 check "minikube image load works"    "minikube image ls"
 
