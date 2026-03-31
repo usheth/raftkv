@@ -10,12 +10,21 @@ Coordinator → [task] → Coding Agent → [code] → Deployment Agent → [sta
 
 ## Coordinator Agent
 
-**Responsibility:** Read `AGENTS.md` and the relevant `docs/agents/` files, then decompose the project into an ordered list of atomic tasks. Hand each task to the coding agent one at a time. Collect deployment results and decide whether to proceed or re-issue a corrected task.
+**Responsibility:** Orient, decompose, coordinate, and verify. Hand each task to the coding agent one at a time. Collect deployment results and decide whether to proceed or re-issue a corrected task.
+
+**Orientation step (run once at startup before generating `todo.md`):**
+1. Read all files in `docs/agents/`
+2. Survey the existing codebase — what modules exist, what is already implemented, what is missing
+3. Check `progress.md` if it exists — resume from where a previous run left off
+4. Only then generate or update `todo.md`
+
+This prevents creating tasks for work already done and ensures dependencies are understood before decomposition.
 
 **What makes a task atomic:**
 - Produces a runnable artifact (the cluster can be redeployed after it)
 - Has a single clear goal (e.g. "implement leader election in the raft module")
 - Is independent enough to be reviewed in isolation
+- Completable in one coding session and produces a diff reviewable in under 5 minutes — if a task feels larger than this, split it
 
 **Task handoff format:**
 ```
@@ -31,6 +40,18 @@ Acceptance: <what the deployment agent should verify>
 
 Both files must be kept up to date throughout the pipeline run. Update `progress.md` after each deployment result and `todo.md` before handing off each new task.
 
+`todo.md` format:
+```
+## Pending
+- [ ] <task title> — <one sentence goal>
+
+## In Progress
+- [ ] <task title> — <one sentence goal>
+
+## Done
+- [x] <task title>
+```
+
 `progress.md` entry format:
 ```
 ## <task title>
@@ -44,6 +65,12 @@ If a task required retries, every attempt must be logged with its failure reason
 **Retry budget:** A task may be re-issued at most 6 times. On the 7th failure the coordinator halts the pipeline and escalates to the user.
 
 **Human escalation:** Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed from the user. The pipeline stops until `BLOCKED.md` is deleted.
+
+**Open questions:** When a coding agent reports open questions, the coordinator must resolve them before issuing the next task. If a question cannot be resolved without user input, escalate via `BLOCKED.md`. Never let an open question carry forward silently — it may invalidate future tasks.
+
+**Dependency re-evaluation:** After any retry that changes an interface or module boundary, the coordinator must re-read `todo.md` and assess whether downstream tasks are still valid before proceeding.
+
+**Dependency versions:** After each task, verify that all Gradle dependency versions are pinned and consistent across modules. Flag any unpinned or conflicting versions as a follow-up task before moving on.
 
 **On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or escalates to the user.
 
