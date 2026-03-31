@@ -8,15 +8,25 @@ The project is built using a three-agent pipeline. A coordinator breaks the proj
 Coordinator → [task] → Coding Agent → [code] → Deployment Agent → [status] → Coordinator
 ```
 
+The coordinator is **stateless between iterations**. Each coordinator session is short: read state from disk, decide the next action, write updated state to disk, exit. The loop is driven externally (by the user or a script), not by the coordinator's context. This keeps the coordinator's context window small regardless of how long the project runs.
+
 ## Coordinator Agent
 
-**Responsibility:** Orient, decompose, coordinate, and verify. Hand each task to the coding agent one at a time. Collect deployment results and decide whether to proceed or re-issue a corrected task.
+**Responsibility:** On each invocation, read `progress.md` and `todo.md`, determine the next action, execute it, update state files, and exit. Do not hold state in memory that is not written to disk.
 
-**Orientation step (run once at startup before generating `todo.md`):**
+**Each invocation follows this logic:**
+1. Read `docs/agents/` and state files (`progress.md`, `todo.md`)
+2. If `todo.md` does not exist — run the orientation step (see below) and generate it, then exit
+3. If the last task in `progress.md` failed and is within retry budget — re-issue it with failure context
+4. If the last task passed — mark it done in `todo.md`, issue the next pending task
+5. If `todo.md` has no pending tasks — verify the definition of done and write `DONE.md` if all conditions are met
+6. Write all state changes to disk before exiting
+
+**Orientation step (first invocation only):**
 1. Read all files in `docs/agents/`
 2. Survey the existing codebase — what modules exist, what is already implemented, what is missing
-3. Check `progress.md` if it exists — resume from where a previous run left off
-4. Only then generate or update `todo.md`
+3. Generate `todo.md` with the full ordered task list
+4. Exit — do not issue the first task yet; that happens on the next invocation
 
 This prevents creating tasks for work already done and ensures dependencies are understood before decomposition.
 
@@ -98,7 +108,8 @@ If a task required retries, every attempt must be logged with its failure reason
 4. Apply manifests: `kubectl apply -f k8s/`
 5. Wait for rollout: `kubectl rollout status deployment/raftkv-server`
 6. Run smoke check: see `docs/agents/deployment.md` for the smoke check command
-7. Report: pass/fail, pod logs on failure, any `kubectl describe` output relevant to the failure
+7. Write full logs to `logs/<task-title>.log`
+8. Report status only (PASS/FAIL + one sentence) — the coordinator reads full logs from disk if needed for a retry
 
 **On failure:** Roll back to the last known good image (`kubectl rollout undo`) to restore the cluster before reporting. Then report the full failure context to the coordinator. Do not attempt to fix code.
 
