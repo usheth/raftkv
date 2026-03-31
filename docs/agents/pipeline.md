@@ -31,7 +31,7 @@ Acceptance: <what the deployment agent should verify>
 
 Both files must be kept up to date throughout the pipeline run. Update `progress.md` after each deployment result and `todo.md` before handing off each new task.
 
-**Retry budget:** A task may be re-issued at most 3 times. On the 4th failure the coordinator halts the pipeline and escalates to the user.
+**Retry budget:** A task may be re-issued at most 6 times. On the 7th failure the coordinator halts the pipeline and escalates to the user.
 
 **Human escalation:** Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed from the user. The pipeline stops until `BLOCKED.md` is deleted.
 
@@ -73,7 +73,7 @@ Task: <short title>
 Goal: <one sentence>
 Relevant docs: <comma-separated list>
 Acceptance: <what the deployment agent should verify>
-Attempt: <1-3>
+Attempt: <1-6>
 ```
 
 Deployment Agent → Coordinator:
