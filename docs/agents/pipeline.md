@@ -34,7 +34,10 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 `progress.md` entry format:
 ```
 ## <task title>
+- Started: <timestamp>
 - Attempt <n>: <PASS|FAIL> — <one sentence reason>
+- Completed: <timestamp>
+- Time taken: <duration>
 ```
 If a task required retries, every attempt must be logged with its failure reason so patterns are visible.
 
@@ -84,7 +87,7 @@ The pipeline is complete when all of the following are true:
 - [ ] `BLOCKED.md` does not exist
 - [ ] `progress.md` is complete with outcomes for every task
 
-When all conditions are met, the coordinator writes a final `DONE.md` at the repo root summarising what was built and any known limitations.
+When all conditions are met, the coordinator writes a final `DONE.md` at the repo root summarising what was built, any known limitations, time taken per task, and total pipeline duration.
 
 ## Inter-Agent Contract
 
