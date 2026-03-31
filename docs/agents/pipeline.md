@@ -31,6 +31,10 @@ Acceptance: <what the deployment agent should verify>
 
 Both files must be kept up to date throughout the pipeline run. Update `progress.md` after each deployment result and `todo.md` before handing off each new task.
 
+**Retry budget:** A task may be re-issued at most 3 times. On the 4th failure the coordinator halts the pipeline and escalates to the user.
+
+**Human escalation:** Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed from the user. The pipeline stops until `BLOCKED.md` is deleted.
+
 **On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or escalates to the user.
 
 ## Coding Agent
@@ -40,6 +44,8 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 **Rules:**
 - Read existing code before modifying anything
 - Do not add features not requested in the task
+- Run `./gradlew test` before reporting done — do not hand off if tests fail
+- Commit all changes with a meaningful message before reporting done
 - When done, report back a summary of what changed and any open questions for the coordinator
 
 ## Deployment Agent
@@ -55,4 +61,25 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 6. Run smoke check: see `docs/agents/deployment.md` for the smoke check command
 7. Report: pass/fail, pod logs on failure, any `kubectl describe` output relevant to the failure
 
-**On failure:** Report the full failure context to the coordinator. Do not attempt to fix code.
+**On failure:** Roll back to the last known good image (`kubectl rollout undo`) to restore the cluster before reporting. Then report the full failure context to the coordinator. Do not attempt to fix code.
+
+## Inter-Agent Contract
+
+All handoffs use structured markdown blocks to prevent misreading. Any agent receiving a handoff must validate that all required fields are present before acting.
+
+Coordinator → Coding Agent:
+```
+Task: <short title>
+Goal: <one sentence>
+Relevant docs: <comma-separated list>
+Acceptance: <what the deployment agent should verify>
+Attempt: <1-3>
+```
+
+Deployment Agent → Coordinator:
+```
+Status: <PASS|FAIL>
+Task: <short title>
+Details: <what was verified or what failed>
+Logs: <relevant pod logs or kubectl output, if failed>
+```
