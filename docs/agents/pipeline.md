@@ -14,33 +14,46 @@ Coordinator → [task] → Coding Agent → [diff] → Coordinator → [diff + d
                                                                                          │
                                                                                          ▼
                                                                                      Coordinator
+                                                                                  (next task, no pause)
 ```
 
 **Key rule:** All transitions are gated by the coordinator. The coding agent hands its diff back to the coordinator, which then assembles the full review handoff (diff + relevant docs) and passes it to the review agent. Deployment only happens after an explicit `APPROVE` verdict. On deployment failure, the coordinator `git revert`s the approved commit before re-issuing the task.
 
-The coordinator is **stateless between iterations**. Each coordinator session is short: read state from disk, decide the next action, write updated state to disk, exit. The loop is driven externally (by the user or a script), not by the coordinator's context. This keeps the coordinator's context window small regardless of how long the project runs.
+The coordinator is **long-running**. It does not exit between tasks and requires no human involvement once started. After each successful deployment, the coordinator immediately issues the next pending task without pausing. The pipeline runs autonomously from orientation through to `DONE.md`. The only circumstances under which the coordinator stops are: all tasks complete, or a `BLOCKED.md` is written because a problem genuinely requires human input.
 
 ## Coordinator Agent
 
-**Responsibility:** On each invocation, read `progress.md` and `todo.md`, determine the next action, execute it, update state files, and exit. Do not hold state in memory that is not written to disk.
+**Responsibility:** Run the full pipeline loop from start to finish. Read initial state from disk, execute orientation if needed, then iterate through every pending task — coding → review → deployment — without stopping between iterations. Write all state to disk continuously so the pipeline can be resumed after an unexpected exit.
 
-**Each invocation follows this logic:**
+**Full loop — run continuously until done or blocked:**
 1. Read `docs/agents/` and state files (`progress.md`, `todo.md`)
-2. If `todo.md` does not exist — run the orientation step (see below) and generate it, then exit
-3. If the last review returned `REQUEST_CHANGES` and is within review retry budget — re-issue the task to the coding agent with the review issues as context
-4. If the last deployment failed and is within deployment retry budget — `git revert` the approved commit, then re-issue the task to the coding agent with the failure context
-5. If the last deployment passed — mark it done in `todo.md`, issue the next pending task
-6. If `todo.md` has no pending tasks — verify the definition of done and write `DONE.md` if all conditions are met
-7. Write all state changes to disk before exiting
+2. If `todo.md` does not exist — run the orientation step (see below), then immediately continue to step 3
+3. If there is a task `In Progress`:
+   - If awaiting review retry (`REQUEST_CHANGES`, within budget) — re-issue the task to the coding agent with review issues as context; go to coding step
+   - If awaiting deployment retry (deployment `FAIL`, within budget) — `git revert` the approved commit, re-issue the task to the coding agent with failure context; go to coding step
+4. Pick the next `Pending` task, move it to `In Progress` in `todo.md`
+5. **Coding step:** Issue the task to the coding agent; wait for diff and summary
+6. If the coding agent reports open questions — resolve them from docs; if unresolvable without human input, write `BLOCKED.md` and stop
+7. **Review step:** Assemble the review handoff (diff + relevant docs) and issue it to the review agent; wait for verdict; log verdict in `progress.md`
+   - `REQUEST_CHANGES` within budget → return to coding step with issues as context
+   - `REQUEST_CHANGES` budget exhausted → write `BLOCKED.md` and stop
+   - `REJECT` → write `BLOCKED.md` and stop
+   - `APPROVE` → continue to deployment step
+8. **Deployment step:** Issue to the deployment agent; wait for result; log result in `progress.md`
+   - `FAIL` within budget → `git revert`, return to coding step with failure context
+   - `FAIL` budget exhausted → write `BLOCKED.md` and stop
+   - `PASS` → mark task done in `todo.md`, update `progress.md`
+9. Re-evaluate downstream tasks in `todo.md` for any interface or dependency changes
+10. Verify all Gradle dependency versions are pinned; if not, insert a version-pinning task before proceeding
+11. **Immediately go to step 4** — no pause, no human prompt, no wait
+12. When no `Pending` tasks remain — verify the definition of done and write `DONE.md`
 
-**Orientation step (first invocation only):**
-1. Run `scripts/preflight.sh` — if it fails, write `BLOCKED.md` describing which check failed and exit. Do not proceed.
+**Orientation step (first run only):**
+1. Run `scripts/preflight.sh` — if it fails, write `BLOCKED.md` describing which check failed and stop
 2. Read all files in `docs/agents/`
 3. Survey the existing codebase — what modules exist, what is already implemented, what is missing
 4. Generate `todo.md` with the full ordered task list
-5. Exit — do not issue the first task yet; that happens on the next invocation
-
-This prevents creating tasks for work already done and ensures dependencies are understood before decomposition.
+5. Immediately continue into the pipeline loop — do not pause or wait for human input
 
 **What makes a task atomic:**
 - Produces a runnable artifact (the cluster can be redeployed after it)
@@ -83,22 +96,24 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 - Completed: <timestamp>
 - Time taken: <duration>
 ```
+
+All timestamps must use the format `YYYY-MM-DD HH:MM:SS.mmm` (e.g. `2026-03-30 14:23:07.412`), including seconds and milliseconds. Time taken must be recorded in milliseconds (e.g. `Time taken: 47823ms`).
 Every review verdict and deployment attempt must be logged. If a task required retries, the full sequence of events must be visible in the history.
 
 **Retry budgets:** Review retries and deployment retries are tracked separately.
-- A task may receive at most 6 `REQUEST_CHANGES` verdicts before the coordinator escalates to the user
-- A task may fail deployment at most 6 times before the coordinator escalates to the user
+- A task may receive at most 6 `REQUEST_CHANGES` verdicts before the coordinator writes `BLOCKED.md`
+- A task may fail deployment at most 6 times before the coordinator writes `BLOCKED.md`
 - The two counters are independent — exhausting one does not affect the other
 
-**Human escalation:** Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed from the user. The pipeline stops until `BLOCKED.md` is deleted.
+**Human escalation:** The only reason the pipeline stops is a genuine blocker that cannot be resolved from the codebase or docs alone. Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed. The pipeline stops until `BLOCKED.md` is deleted. Do not escalate for things that can be resolved by re-reading docs, adjusting the implementation, or retrying within budget.
 
-**Open questions:** When a coding agent reports open questions, the coordinator must resolve them before issuing the next task. If a question cannot be resolved without user input, escalate via `BLOCKED.md`. Never let an open question carry forward silently — it may invalidate future tasks.
+**Open questions:** When a coding agent reports open questions, the coordinator must resolve them before issuing the next task. If a question can be answered from `docs/agents/`, answer it and re-issue. Only escalate via `BLOCKED.md` if the answer genuinely requires human input unavailable in the docs.
 
 **Dependency re-evaluation:** After any retry that changes an interface or module boundary, the coordinator must re-read `todo.md` and assess whether downstream tasks are still valid before proceeding.
 
 **Dependency versions:** After each task, verify that all Gradle dependency versions are pinned and consistent across modules. Flag any unpinned or conflicting versions as a follow-up task before moving on.
 
-**On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or escalates to the user.
+**On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or (only if infra is broken and unrecoverable without human help) writes `BLOCKED.md`.
 
 ## Coding Agent
 
@@ -115,7 +130,7 @@ Every review verdict and deployment attempt must be logged. If a task required r
 
 ## Code Review Agent
 
-**Responsibility:** Receive the task handoff and the git diff from the coding agent. Review the diff and decide: approve (coordinator proceeds to deployment), request changes (coordinator re-issues to coding agent), or reject (coordinator escalates to user).
+**Responsibility:** Receive the task handoff and the git diff from the coding agent. Review the diff and decide: approve (coordinator proceeds to deployment), request changes (coordinator re-issues to coding agent), or reject (coordinator writes `BLOCKED.md`).
 
 **Each review runs in a fresh agent session.**
 
@@ -132,7 +147,7 @@ Every review verdict and deployment attempt must be logged. If a task required r
 **Verdicts:**
 - `APPROVE` — commit the diff and proceed to deployment
 - `REQUEST_CHANGES` — return specific required changes to the coordinator; counts as a retry attempt
-- `REJECT` — unresolvable issue; coordinator escalates to user via `BLOCKED.md`
+- `REJECT` — unresolvable issue; coordinator writes `BLOCKED.md`
 
 On `APPROVE`, the review agent commits the diff with a meaningful message and reports done.
 
