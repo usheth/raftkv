@@ -2,24 +2,29 @@
 
 ## Overview
 
-The project is built using a four-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, a code review agent reviews the diff before it ships, and a deployment agent validates each increment against a local Kubernetes cluster.
+The project is built using a four-agent pipeline. A coordinator breaks the project into atomic tasks, a coding agent implements each one, a review agent works directly with the coding agent to iterate until the code is approved, and a deployment agent validates each increment against a local Kubernetes cluster.
 
 ```
-Coordinator → [task] → Coding Agent → [diff] → Coordinator → [diff + docs] → Review Agent → [verdict] → Coordinator
-                                                                                                                │
-                                                                                         ┌──────────────────────┤
-                                                                                         │ APPROVE              │ REQUEST_CHANGES / REJECT
-                                                                                         ▼                      ▼
-                                                                                Deployment Agent          re-issue / BLOCKED.md
-                                                                                         │
-                                                                                         ▼
-                                                                                     Coordinator
-                                                                                  (next task, no pause)
+Coordinator → [task] → Coding Agent ←──────────────────────────────────┐
+                                    │                                    │ REQUEST_CHANGES (up to 5x)
+                                    └──→ [diff + docs] → Review Agent ──┘
+                                                                │
+                                                        APPROVE │ REJECT
+                                                                │       └──→ BLOCKED.md
+                                                                ▼
+                                                       Deployment Agent
+                                                                │
+                                                        PASS    │    FAIL (git revert + re-issue)
+                                                                ▼
+                                                          Coordinator
+                                                       (next task, no pause)
 ```
 
-**Key rule:** All transitions are gated by the coordinator. The coding agent hands its diff back to the coordinator, which then assembles the full review handoff (diff + relevant docs) and passes it to the review agent. Deployment only happens after an explicit `APPROVE` verdict. On deployment failure, the coordinator `git revert`s the approved commit before re-issuing the task.
+**Key rule:** The coordinator issues a task and then the coding agent and review agent iterate together in a direct loop (max 5 `REQUEST_CHANGES` rounds) until the review agent either `APPROVE`s or `REJECT`s. The coordinator is not involved during the coding–review loop. Deployment only happens after an explicit `APPROVE` verdict. On deployment failure, the coordinator `git revert`s the approved commit before re-issuing the task to the coding agent.
 
 The coordinator is **long-running**. It does not exit between tasks and requires no human involvement once started. After each successful deployment, the coordinator immediately issues the next pending task without pausing. The pipeline runs autonomously from orientation through to `DONE.md`. The only circumstances under which the coordinator stops are: all tasks complete, or a `BLOCKED.md` is written because a problem genuinely requires human input.
+
+**Agent lifetimes and spawning chain:** Every agent except the coordinator is short-lived — each is spawned for a single job and exits when done. The spawning chain is: the coordinator spawns a fresh coding agent per task (and per deployment retry); the coding agent spawns a fresh review agent per review round; the coordinator spawns a fresh deployment agent per deployment attempt. No state carries over between spawns; everything needed must be passed explicitly in the handoff.
 
 ## Coordinator Agent
 
@@ -28,32 +33,29 @@ The coordinator is **long-running**. It does not exit between tasks and requires
 **Full loop — run continuously until done or blocked:**
 1. Read `docs/agents/` and state files (`progress.md`, `todo.md`)
 2. If `todo.md` does not exist — run the orientation step (see below), then immediately continue to step 3
-3. If there is a task `In Progress`:
-   - If awaiting review retry (`REQUEST_CHANGES`, within budget) — re-issue the task to the coding agent with review issues as context; go to coding step
-   - If awaiting deployment retry (deployment `FAIL`, within budget) — `git revert` the approved commit, re-issue the task to the coding agent with failure context; go to coding step
+3. If there is a task `In Progress` with a deployment `FAIL` within budget — run `git revert HEAD` to undo the approved commit, re-issue the task to the coding agent (with failure context); go to step 5
 4. Pick the next `Pending` task, move it to `In Progress` in `todo.md`
-5. **Coding step:** Issue the task to the coding agent; wait for diff and summary
-6. If the coding agent reports open questions — resolve them from docs; if unresolvable without human input, write `BLOCKED.md` and stop
-7. **Review step:** Assemble the review handoff (diff + relevant docs) and issue it to the review agent; wait for verdict; log verdict in `progress.md`
-   - `REQUEST_CHANGES` within budget → return to coding step with issues as context
-   - `REQUEST_CHANGES` budget exhausted → write `BLOCKED.md` and stop
-   - `REJECT` → write `BLOCKED.md` and stop
-   - `APPROVE` → continue to deployment step
-8. **Deployment step:** Issue to the deployment agent; wait for result; log result in `progress.md`
-   - `FAIL` within budget → `git revert`, return to coding step with failure context
+5. **Coding + review loop:** Issue the task to the coding agent with the task handoff; the coding agent works with the review agent directly (up to 5 `REQUEST_CHANGES` rounds). The coordinator waits for the final outcome from this loop:
+   - If the coding agent reports open questions — resolve them from docs; if unresolvable without human input, write `BLOCKED.md` and stop
+   - `REJECT` from the review agent → write `BLOCKED.md` and stop
+   - `APPROVE` from the review agent → log verdict in `progress.md`, continue to deployment step
+6. **Deployment step:** Issue to the deployment agent; wait for result; log result in `progress.md`
+   - `FAIL` within budget → `git revert`, return to step 5 with failure context
    - `FAIL` budget exhausted → write `BLOCKED.md` and stop
-   - `PASS` → mark task done in `todo.md`, update `progress.md`
-9. Re-evaluate downstream tasks in `todo.md` for any interface or dependency changes
-10. Verify all Gradle dependency versions are pinned; if not, insert a version-pinning task before proceeding
-11. **Immediately go to step 4** — no pause, no human prompt, no wait
-12. When no `Pending` tasks remain — verify the definition of done and write `DONE.md`
+   - `PASS` → mark task done in `todo.md`, update `progress.md`, run `git push`
+7. Re-evaluate downstream tasks in `todo.md` for any interface or dependency changes
+8. Verify all Gradle dependency versions are pinned; if not, insert a version-pinning task before proceeding
+9. **Immediately go to step 4** — no pause, no human prompt, no wait
+10. When no `Pending` tasks remain — verify the definition of done and write `DONE.md`
 
-**Orientation step (first run only):**
+**Orientation step (first run only — skipped on resume):**
 1. Run `scripts/preflight.sh` — if it fails, write `BLOCKED.md` describing which check failed and stop
 2. Read all files in `docs/agents/`
 3. Survey the existing codebase — what modules exist, what is already implemented, what is missing
 4. Generate `todo.md` with the full ordered task list
 5. Immediately continue into the pipeline loop — do not pause or wait for human input
+
+On resume (coordinator restarted mid-pipeline), skip orientation entirely — `todo.md` already exists, so proceed directly to step 3 of the main loop.
 
 **What makes a task atomic:**
 - Produces a runnable artifact (the cluster can be redeployed after it)
@@ -67,6 +69,8 @@ Task: <short title>
 Goal: <one sentence>
 Relevant docs: <list of docs/agents/ files to load>
 Acceptance: <what the deployment agent should verify>
+Deployment attempt: <1-6>
+Failure context: <deployment failure details from previous attempt, or "none">
 ```
 
 **State files:** The coordinator maintains two files at the repo root:
@@ -91,50 +95,51 @@ Both files must be kept up to date throughout the pipeline run. Update `progress
 ```
 ## <task title>
 - Started: <timestamp>
-- Review <n>: <APPROVE|REQUEST_CHANGES|REJECT> — <one sentence reason>
+- Review: <APPROVED|REJECTED> after <n> round(s)
 - Deployment <n>: <PASS|FAIL> — <one sentence reason>
 - Completed: <timestamp>
 - Time taken: <duration>
 ```
 
 All timestamps must use the format `YYYY-MM-DD HH:MM:SS.mmm` (e.g. `2026-03-30 14:23:07.412`), including seconds and milliseconds. Time taken must be recorded in milliseconds (e.g. `Time taken: 47823ms`).
-Every review verdict and deployment attempt must be logged. If a task required retries, the full sequence of events must be visible in the history.
+The coordinator logs the final review verdict and the number of rounds it took, plus every deployment attempt. If a task required deployment retries, each attempt must appear as a separate `Deployment <n>` line so the full sequence is visible in the history.
 
 **Retry budgets:** Review retries and deployment retries are tracked separately.
-- A task may receive at most 6 `REQUEST_CHANGES` verdicts before the coordinator writes `BLOCKED.md`
+- The coding–review loop allows at most 5 `REQUEST_CHANGES` rounds per task; if the review agent issues a 6th `REQUEST_CHANGES` it must instead `REJECT`, which causes the coordinator to write `BLOCKED.md`
 - A task may fail deployment at most 6 times before the coordinator writes `BLOCKED.md`
 - The two counters are independent — exhausting one does not affect the other
 
 **Human escalation:** The only reason the pipeline stops is a genuine blocker that cannot be resolved from the codebase or docs alone. Escalation means writing a `BLOCKED.md` at the repo root describing the task, the failure, and what decision is needed. The pipeline stops until `BLOCKED.md` is deleted. Do not escalate for things that can be resolved by re-reading docs, adjusting the implementation, or retrying within budget.
 
-**Open questions:** When a coding agent reports open questions, the coordinator must resolve them before issuing the next task. If a question can be answered from `docs/agents/`, answer it and re-issue. Only escalate via `BLOCKED.md` if the answer genuinely requires human input unavailable in the docs.
+**Open questions:** When the coding agent's final outcome report includes open questions, the coordinator must resolve them before issuing the next task. If a question can be answered from `docs/agents/`, answer it inline. Only escalate via `BLOCKED.md` if the answer genuinely requires human input unavailable in the docs.
 
 **Dependency re-evaluation:** After any retry that changes an interface or module boundary, the coordinator must re-read `todo.md` and assess whether downstream tasks are still valid before proceeding.
 
 **Dependency versions:** After each task, verify that all Gradle dependency versions are pinned and consistent across modules. Flag any unpinned or conflicting versions as a follow-up task before moving on.
 
-**On deployment failure:** The coordinator receives the deployment agent's report, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or (only if infra is broken and unrecoverable without human help) writes `BLOCKED.md`.
+**On deployment failure:** The coordinator receives the deployment agent's report, runs `git revert HEAD` to undo the approved commit, determines if it's a code issue or infra issue, and either re-issues the task with the error as context or (only if infra is broken and unrecoverable without human help) writes `BLOCKED.md`.
 
 ## Coding Agent
 
-**Responsibility:** Receive a single task from the coordinator. Load only the `docs/agents/` files listed in the handoff. Implement the task. Do not implement beyond the task scope.
+**Responsibility:** Receive a single task from the coordinator. Load only the `docs/agents/` files listed in the handoff. Implement the task. Then hand off directly to the review agent. If the review agent returns `REQUEST_CHANGES`, address the issues and re-submit — repeat up to 5 times. Do not implement beyond the task scope.
 
 **Each task runs in a fresh agent session.** The coordinator must not reuse a coding agent across tasks. Context from previous tasks must not carry over.
 
 **Rules:**
 - Read existing code before modifying anything
 - Do not add features not requested in the task
-- Run `./gradlew test` before reporting done — do not hand off if tests fail
-- Do not commit — the review agent decides whether the diff is committed
-- When done, report back a summary of what changed and any open questions for the coordinator
+- Run `./gradlew test` before handing off to the review agent — do not hand off if tests fail
+- Do not commit — the review agent commits on `APPROVE`
+- After receiving `REQUEST_CHANGES`, address all listed issues, re-run `./gradlew test`, and re-submit to the review agent
+- If the review agent `APPROVE`s or `REJECT`s, or after 5 `REQUEST_CHANGES` rounds, report the final outcome back to the coordinator along with any open questions
 
 ## Code Review Agent
 
-**Responsibility:** Receive the task handoff and the git diff from the coding agent. Review the diff and decide: approve (coordinator proceeds to deployment), request changes (coordinator re-issues to coding agent), or reject (coordinator writes `BLOCKED.md`).
+**Responsibility:** Receive the task handoff and the git diff from the coding agent. Review the diff and decide: approve (coding agent reports back to coordinator), request changes (coding agent fixes and resubmits), or reject (coding agent reports `REJECT` to coordinator).
 
-**Each review runs in a fresh agent session.**
+**Each review round is a fresh agent session.** Because no state carries over, the coding agent must include the full review history (all prior round verdicts and issues) in every handoff so the review agent can apply consistent standards and not re-flag already-resolved issues.
 
-**The coordinator passes the same `Relevant docs` list to the review agent as it passed to the coding agent.** The review agent must load these before reviewing — correctness and consistency can only be judged against the architectural decisions in those docs.
+**The coding agent passes the same `Relevant docs` list that the coordinator provided.** The review agent must load these before reviewing — correctness and consistency can only be judged against the architectural decisions in those docs.
 
 **Review checklist:**
 - **Scope** — does the diff touch only files relevant to the task? Flag any out-of-scope changes
@@ -145,11 +150,9 @@ Every review verdict and deployment attempt must be logged. If a task required r
 - **No hardcoded config** — all ports, addresses, and topology must come from config, not code
 
 **Verdicts:**
-- `APPROVE` — commit the diff and proceed to deployment
-- `REQUEST_CHANGES` — return specific required changes to the coordinator; counts as a retry attempt
-- `REJECT` — unresolvable issue; coordinator writes `BLOCKED.md`
-
-On `APPROVE`, the review agent commits the diff with a meaningful message and reports done.
+- `APPROVE` — commit the diff first, then notify the coding agent (who reports back to the coordinator); committing before notifying ensures the coordinator never proceeds to deployment against an uncommitted diff
+- `REQUEST_CHANGES` — return specific required changes to the coding agent for another round; if this would be the 6th round, issue `REJECT` instead
+- `REJECT` — unresolvable issue; coding agent reports this back to the coordinator who writes `BLOCKED.md`
 
 ## Deployment Agent
 
@@ -160,12 +163,12 @@ On `APPROVE`, the review agent commits the diff with a meaningful message and re
 2. Build Docker image: `docker build -t raftkv:dev .`
 3. Load into local cluster: see `docs/agents/deployment.md` for the cluster type
 4. Apply manifests: `kubectl apply -f k8s/`
-5. Wait for rollout: `kubectl rollout status deployment/raftkv-server`
+5. Wait for rollout: `kubectl rollout status statefulset/raftkv-server -n raftkv`
 6. Run smoke check: see `docs/agents/deployment.md` for the smoke check command
-7. Write full logs to `logs/<task-title>.log`
+7. `mkdir -p logs` then write full logs to `logs/<task-title>.log`
 8. Report status only (PASS/FAIL + one sentence) — the coordinator reads full logs from disk if needed for a retry
 
-**On failure:** Roll back to the last known good image (`kubectl rollout undo`) to restore the cluster before reporting. Then report the full failure context to the coordinator. Do not attempt to fix code.
+**On failure:** Roll back to the last known good image (`kubectl rollout undo statefulset/raftkv-server -n raftkv`) to restore the cluster before reporting. Then report the full failure context to the coordinator. Do not attempt to fix code.
 
 ## Definition of Done
 
@@ -191,24 +194,36 @@ Task: <short title>
 Goal: <one sentence>
 Relevant docs: <comma-separated list>
 Acceptance: <what the deployment agent should verify>
-Attempt: <1-6>
+Deployment attempt: <1-6>
+Failure context: <deployment failure details from previous attempt, or "none">
 ```
 
-Coordinator → Review Agent:
+Coding Agent → Review Agent:
 ```
 Task: <short title>
 Goal: <one sentence>
-Relevant docs: <comma-separated list — same as passed to coding agent>
+Relevant docs: <comma-separated list — same as provided by coordinator>
 Diff: <output of git diff HEAD>
 Changed files: <comma-separated list>
-Open questions: <any unresolved questions from coding agent, or "none">
+Review round: <1-6>
+Review history: <prior round verdicts and issues, oldest first — or "none" on round 1>
+Open questions: <any unresolved questions, or "none">
 ```
 
-Review Agent → Coordinator:
+Review Agent → Coding Agent:
 ```
 Verdict: <APPROVE|REQUEST_CHANGES|REJECT>
 Task: <short title>
+Round: <1-6>
 Issues: <bulleted list of required changes, or "none">
+```
+
+Coding Agent → Coordinator (final outcome):
+```
+Outcome: <APPROVED|REJECTED>
+Task: <short title>
+Review rounds: <number of REQUEST_CHANGES rounds before final verdict>
+Open questions: <any unresolved questions for the coordinator, or "none">
 ```
 
 Deployment Agent → Coordinator:
