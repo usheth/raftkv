@@ -1,0 +1,488 @@
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$PlatformResolver.lookupByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$NameServiceAddresses.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to LEADER (leader: raftkv-server-2)
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:41 AM com.raftkv.server.Main main
+[pod/raftkv-server-0/raftkv] INFO: Starting RaftKV node: raftkv-server-0 on port 8080
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:41 AM com.raftkv.server.Main main
+[pod/raftkv-server-0/raftkv] INFO: Peers: {raftkv-server-1=raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080, raftkv-server-2=raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080}
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:42 AM com.raftkv.server.RaftServer bindGrpc
+[pod/raftkv-server-0/raftkv] INFO: RaftServer gRPC bound on port 8080
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:42 AM com.raftkv.server.RaftServer startEventLoop
+[pod/raftkv-server-0/raftkv] INFO: RaftServer event loop started for node raftkv-server-0
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:42 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<4>: (raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$PlatformResolver.lookupByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$NameServiceAddresses.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$PlatformResolver.lookupByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$NameServiceAddresses.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:43 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<4>: (raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:44 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:45 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:45 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:45 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:45 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:45 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:46 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<4>: (raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:46 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:46 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:46 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:46 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:47 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<4>: (raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:48 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:52 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<4>: (raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:54 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-0/raftkv] INFO: Node raftkv-server-0 role changed to CANDIDATE
+[pod/raftkv-server-0/raftkv] Apr 01, 2026 2:32:58 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-0/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-0/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$PlatformResolver.lookupByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress$NameServiceAddresses.get(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-0/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-0/raftkv] 	... 5 more
+[pod/raftkv-server-0/raftkv] }
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.Main main
+[pod/raftkv-server-1/raftkv] INFO: Starting RaftKV node: raftkv-server-1 on port 8080
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.Main main
+[pod/raftkv-server-1/raftkv] INFO: Peers: {raftkv-server-0=raftkv-server-0.raftkv-headless.raftkv.svc.cluster.local:8080, raftkv-server-2=raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080}
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:49 AM com.raftkv.server.RaftServer bindGrpc
+[pod/raftkv-server-1/raftkv] INFO: RaftServer gRPC bound on port 8080
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftServer startEventLoop
+[pod/raftkv-server-1/raftkv] INFO: RaftServer event loop started for node raftkv-server-1
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-1/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local: Name does not resolve
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Native Method)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.Inet6AddressImpl.lookupAllHostAddr(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$PlatformResolver.lookupByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAddressesFromNameService(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$NameServiceAddresses.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:50 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:51 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-1/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:51 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-1/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:52 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:53 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:54 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:54 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to CANDIDATE
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:54 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-1/raftkv] INFO: Node raftkv-server-1 role changed to LEADER (leader: raftkv-server-1)
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:55 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-1/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-1/raftkv] Apr 01, 2026 2:32:59 AM io.grpc.internal.ManagedChannelImpl$NameResolverListener handleErrorInSyncContext
+[pod/raftkv-server-1/raftkv] WARNING: [Channel<6>: (raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local:8080)] Failed to resolve name. status=Status{code=UNAVAILABLE, description=Unable to resolve host raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local, cause=java.lang.RuntimeException: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:223)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.doResolve(DnsNameResolver.java:282)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$Resolve.run(DnsNameResolver.java:318)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.lang.Thread.run(Unknown Source)
+[pod/raftkv-server-1/raftkv] Caused by: java.net.UnknownHostException: raftkv-server-2.raftkv-headless.raftkv.svc.cluster.local
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress$CachedLookup.get(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName0(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at java.base/java.net.InetAddress.getAllByName(Unknown Source)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver$JdkAddressResolver.resolveAddress(DnsNameResolver.java:632)
+[pod/raftkv-server-1/raftkv] 	at io.grpc.internal.DnsNameResolver.resolveAddresses(DnsNameResolver.java:219)
+[pod/raftkv-server-1/raftkv] 	... 5 more
+[pod/raftkv-server-1/raftkv] }
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:32:58 AM com.raftkv.server.Main main
+[pod/raftkv-server-2/raftkv] INFO: Starting RaftKV node: raftkv-server-2 on port 8080
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:32:58 AM com.raftkv.server.Main main
+[pod/raftkv-server-2/raftkv] INFO: Peers: {raftkv-server-0=raftkv-server-0.raftkv-headless.raftkv.svc.cluster.local:8080, raftkv-server-1=raftkv-server-1.raftkv-headless.raftkv.svc.cluster.local:8080}
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:00 AM com.raftkv.server.RaftServer bindGrpc
+[pod/raftkv-server-2/raftkv] INFO: RaftServer gRPC bound on port 8080
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:00 AM com.raftkv.server.RaftServer startEventLoop
+[pod/raftkv-server-2/raftkv] INFO: RaftServer event loop started for node raftkv-server-2
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:00 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:00 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to CANDIDATE
+[pod/raftkv-server-2/raftkv] Apr 01, 2026 2:33:01 AM com.raftkv.server.RaftEventLoop handleOutput
+[pod/raftkv-server-2/raftkv] INFO: Node raftkv-server-2 role changed to LEADER (leader: raftkv-server-2)

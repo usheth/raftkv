@@ -1,0 +1,23 @@
+syntax = "proto3";
+package raftkv;
+option java_package = "com.raftkv.proto";
+option java_outer_classname = "KvProto";
+option java_multiple_files = true;
+
+service KvService {
+    rpc Get (GetRequest) returns (GetResponse);
+    rpc Put (PutRequest) returns (PutResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    rpc GetNodeRole (GetNodeRoleRequest) returns (GetNodeRoleResponse);
+}
+
+message GetRequest { string key = 1; }
+message GetResponse { Status status = 1; bytes value = 2; string leader_hint = 3; }
+message PutRequest { string key = 1; bytes value = 2; }
+message PutResponse { Status status = 1; string leader_hint = 2; }
+message DeleteRequest { string key = 1; }
+message DeleteResponse { Status status = 1; string leader_hint = 2; }
+message GetNodeRoleRequest {}
+message GetNodeRoleResponse { string role = 1; string node_id = 2; string leader_id = 3; }
+
+enum Status { OK = 0; NOT_LEADER = 1; KEY_NOT_FOUND = 2; RESHARDING = 3; ERROR = 4; }

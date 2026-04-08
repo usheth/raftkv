@@ -1,0 +1,33 @@
+plugins {
+    id 'groovy'
+}
+
+dependencies {
+    testImplementation project(':core')
+    testImplementation project(':raft')
+    testImplementation project(':store')
+    testImplementation project(':server')
+    testImplementation project(':proto')
+
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
+
+    testImplementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    testImplementation "io.grpc:grpc-stub:${grpcVersion}"
+    testImplementation "io.grpc:grpc-protobuf:${grpcVersion}"
+
+    testImplementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    testRuntimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+}
+
+// test-harness has no production source
+sourceSets {
+    main {
+        groovy.srcDirs = []
+        java.srcDirs = []
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

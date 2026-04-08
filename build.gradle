@@ -1,0 +1,30 @@
+// Root build.gradle — common configuration for all subprojects
+
+ext {
+    grpcVersion        = '1.63.0'
+    protobufVersion    = '3.25.3'
+    guavaVersion       = '33.2.0-jre'
+    spockVersion       = '2.3-groovy-4.0'
+    groovyVersion      = '4.0.21'
+    slf4jVersion       = '2.0.13'
+    logbackVersion     = '1.5.6'
+    shadowVersion      = '8.1.1'
+    protobufPluginVersion = '0.9.4'
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    // Apply Java settings to all subprojects that apply the java-library or java plugin
+    plugins.withType(JavaPlugin) {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
+        }
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+        }
+    }
+}

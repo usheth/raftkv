@@ -1,0 +1,8 @@
+rootProject.name = 'raftkv'
+
+include 'proto'
+include 'core'
+include 'raft'
+include 'store'
+include 'server'
+include 'test-harness'
