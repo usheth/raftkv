@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.raft.RaftLogReplicationTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-04-08T03:51:50" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.05">
+  <properties/>
+  <testcase name="noCommitBeforeMajority()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.023"/>
+  <testcase name="commitRequiresMajority()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.002"/>
+  <testcase name="leaderReplicatesEntryToFollowers()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.005"/>
+  <testcase name="heartbeatResetsElectionTimeout()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.003"/>
+  <testcase name="onlyCurrentTermEntriesCommit()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.003"/>
+  <testcase name="followerRejectsMismatchedPrevLogLeaderRetries()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.002"/>
+  <testcase name="followerRejectsThenAcceptsOnRetry()" classname="com.raftkv.raft.RaftLogReplicationTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

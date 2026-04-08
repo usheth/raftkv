@@ -1,0 +1,117 @@
+=== Raft Leader Election Validation Log ===
+Date: Tue Apr  7 08:44:55 PM PDT 2026
+
+=== Step 1: :raft:test :core:test ===
+> Task :raft:cleanTest
+> Task :core:cleanTest UP-TO-DATE
+
+BUILD SUCCESSFUL in 833ms
+2 actionable tasks: 1 executed, 1 up-to-date
+> Task :core:compileJava UP-TO-DATE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :raft:compileJava UP-TO-DATE
+> Task :raft:processResources NO-SOURCE
+> Task :raft:classes UP-TO-DATE
+> Task :raft:compileTestJava UP-TO-DATE
+> Task :raft:processTestResources NO-SOURCE
+> Task :raft:testClasses UP-TO-DATE
+> Task :raft:test
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :core:test NO-SOURCE
+
+BUILD SUCCESSFUL in 1s
+5 actionable tasks: 1 executed, 4 up-to-date
+
+=== Test Results XML ===
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.raft.RaftLeaderElectionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-04-08T03:44:58" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.051">
+  <properties/>
+  <testcase name="singleNodeElectsItself()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.033"/>
+  <testcase name="splitVoteResolvesWithHigherTerm()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.008"/>
+  <testcase name="threeNodeElection()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.002"/>
+  <testcase name="candidateRevertsOnHigherTermResponse()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
+
+=== Step 2: Full Build ===
+> Task :core:compileJava UP-TO-DATE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:assemble UP-TO-DATE
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :core:test NO-SOURCE
+> Task :core:check UP-TO-DATE
+> Task :core:build UP-TO-DATE
+> Task :proto:compileJava UP-TO-DATE
+> Task :proto:extractProto UP-TO-DATE
+> Task :proto:processResources UP-TO-DATE
+> Task :proto:classes UP-TO-DATE
+> Task :proto:jar UP-TO-DATE
+> Task :proto:assemble UP-TO-DATE
+> Task :proto:extractIncludeProto UP-TO-DATE
+> Task :proto:extractIncludeTestProto UP-TO-DATE
+> Task :proto:extractTestProto UP-TO-DATE
+> Task :proto:generateTestProto NO-SOURCE
+> Task :proto:compileTestJava NO-SOURCE
+> Task :proto:processTestResources NO-SOURCE
+> Task :proto:testClasses UP-TO-DATE
+> Task :proto:test NO-SOURCE
+> Task :proto:check UP-TO-DATE
+> Task :proto:build UP-TO-DATE
+> Task :raft:compileJava UP-TO-DATE
+> Task :raft:processResources NO-SOURCE
+> Task :raft:classes UP-TO-DATE
+> Task :raft:jar UP-TO-DATE
+> Task :raft:assemble UP-TO-DATE
+> Task :raft:compileTestJava UP-TO-DATE
+> Task :raft:processTestResources NO-SOURCE
+> Task :raft:testClasses UP-TO-DATE
+> Task :raft:test UP-TO-DATE
+> Task :raft:check UP-TO-DATE
+> Task :raft:build UP-TO-DATE
+> Task :store:compileJava NO-SOURCE
+> Task :server:compileJava NO-SOURCE
+> Task :server:processResources NO-SOURCE
+> Task :server:classes UP-TO-DATE
+> Task :server:jar UP-TO-DATE
+> Task :server:assemble UP-TO-DATE
+> Task :server:compileTestJava NO-SOURCE
+> Task :server:processTestResources NO-SOURCE
+> Task :server:testClasses UP-TO-DATE
+> Task :store:processResources NO-SOURCE
+> Task :store:classes UP-TO-DATE
+> Task :store:jar UP-TO-DATE
+> Task :server:test NO-SOURCE
+> Task :server:check UP-TO-DATE
+> Task :server:build UP-TO-DATE
+> Task :store:assemble UP-TO-DATE
+> Task :store:compileTestJava NO-SOURCE
+> Task :store:processTestResources NO-SOURCE
+> Task :store:testClasses UP-TO-DATE
+> Task :store:test NO-SOURCE
+> Task :store:check UP-TO-DATE
+> Task :store:build UP-TO-DATE
+> Task :test-harness:compileJava NO-SOURCE
+> Task :test-harness:compileGroovy NO-SOURCE
+> Task :test-harness:processResources NO-SOURCE
+> Task :test-harness:classes UP-TO-DATE
+> Task :test-harness:jar UP-TO-DATE
+> Task :test-harness:assemble UP-TO-DATE
+> Task :test-harness:compileTestJava NO-SOURCE
+> Task :test-harness:compileTestGroovy NO-SOURCE
+> Task :test-harness:processTestResources NO-SOURCE
+> Task :test-harness:testClasses UP-TO-DATE
+> Task :test-harness:test NO-SOURCE
+> Task :test-harness:check UP-TO-DATE
+> Task :test-harness:build UP-TO-DATE
+
+BUILD SUCCESSFUL in 987ms
+16 actionable tasks: 16 up-to-date

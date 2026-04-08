@@ -97,6 +97,42 @@ public final class PersistentState {
         appendEntryToFile(entry);
     }
 
+    /**
+     * Truncates the log so that only entries with index < fromIndex remain.
+     * Persists the result atomically.
+     */
+    public void truncateFrom(long fromIndex) throws IOException {
+        // fromIndex is 1-based log index; remove all entries whose index >= fromIndex
+        log.removeIf(e -> e.getIndex() >= fromIndex);
+        persistHeader();
+    }
+
+    /**
+     * Returns the log entry at the given 1-based log index, or null if not present.
+     */
+    public LogEntry getEntryAtIndex(long index) {
+        // Linear search — acceptable for correctness; log is short in tests
+        for (int i = log.size() - 1; i >= 0; i--) {
+            LogEntry e = log.get(i);
+            if (e.getIndex() == index) return e;
+            if (e.getIndex() < index) break;
+        }
+        return null;
+    }
+
+    /**
+     * Returns all log entries with index >= fromIndex (in order).
+     */
+    public List<LogEntry> getEntriesFrom(long fromIndex) {
+        List<LogEntry> result = new ArrayList<>();
+        for (LogEntry e : log) {
+            if (e.getIndex() >= fromIndex) {
+                result.add(e);
+            }
+        }
+        return result;
+    }
+
     // -------------------------------------------------------------------------
     // Persistence helpers
     // -------------------------------------------------------------------------
