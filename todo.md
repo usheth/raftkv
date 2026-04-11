@@ -1,7 +1,7 @@
 ## Pending
+- [ ] Smoke test verification — run `docker build -t raftkv:dev .`, `minikube image load raftkv:dev`, `kubectl apply -f k8s/`, wait for rollout, and run `scripts/healthcheck.sh` to verify leader election and read-after-write from non-leader
 
 ## In Progress
-- [ ] Deployment — Dockerfile (shadowJar from server module), k8s manifests (Namespace, StatefulSet, Service, ConfigMap), healthcheck.sh verifying leader election and read-after-write from non-leader
 
 ## Done
 - [x] Gradle build scaffold
@@ -11,3 +11,4 @@
 - [x] Store module
 - [x] Server module
 - [x] Test harness
+- [x] Deployment — Dockerfile, k8s manifests, healthcheck.sh implemented and reviewed

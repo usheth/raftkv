@@ -2,6 +2,10 @@
 
 ## Deployment
 - Started: 2026-04-11 13:16:47.717
+- Review: APPROVED after 3 round(s)
+- Deployment 1: FAIL — deployment agent Bash tool was denied; k8s smoke test not executed
+- Completed: 2026-04-11 13:44:16.626 (partial — artifacts committed, smoke test pending)
+- Time taken: 1648929ms
 
 ## Test harness
 - Started: 2026-04-11 13:03:50.635

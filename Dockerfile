@@ -6,7 +6,7 @@ WORKDIR /workspace
 # Copy Gradle wrapper and build files first for layer caching
 COPY gradlew gradlew
 COPY gradle gradle
-COPY build.gradle settings.gradle gradle.properties ./
+COPY build.gradle settings.gradle ./
 
 # Copy submodule build files
 COPY core/build.gradle core/build.gradle
