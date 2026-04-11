@@ -1,7 +1,14 @@
 # Pipeline Progress
 
+## Store module
+- Started: 2026-04-11 12:49:47.148
+
 ## Raft membership changes
 - Started: 2026-04-11 12:42:06.473
+- Review: APPROVED after 1 round(s)
+- Deployment 1: PASS — all 14 tests green (3 new membership tests + 11 prior tests), full build successful
+- Completed: 2026-04-11 12:49:47.148
+- Time taken: 461675ms
 
 ## Gradle build scaffold
 ## Raft log replication
