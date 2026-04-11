@@ -71,10 +71,26 @@ class KvServiceImplTest {
             public void sendAppendEntries(NodeId t, com.raftkv.raft.AppendEntriesRequest r,
                     java.util.function.BiConsumer<NodeId, com.raftkv.raft.AppendEntriesResponse> cb) {}
         };
-        StateMachineApplier noOpApplier = entry -> {};
-        raftNode = new RaftNode(LOCAL_NODE, List.of(), storage, new ManualClock(),
-                noOpTransport, noOpApplier);
+        // Applier decodes PUT/DELETE commands and applies them to kvStore (mirrors Main.java)
+        StateMachineApplier applier = entry -> {
+            String cmd = new String(entry.getCommand(), java.nio.charset.StandardCharsets.UTF_8);
+            if (cmd.startsWith("PUT ")) {
+                String rest = cmd.substring(4);
+                int eq = rest.indexOf('=');
+                if (eq > 0) {
+                    kvStore.put(rest.substring(0, eq), rest.substring(eq + 1));
+                }
+            } else if (cmd.startsWith("DELETE ")) {
+                kvStore.delete(cmd.substring(7));
+            }
+        };
+        ManualClock clock = new ManualClock();
+        raftNode = new RaftNode(LOCAL_NODE, List.of(), storage, clock,
+                noOpTransport, applier);
         raftNode.start();
+        // Single-node cluster: advance clock past election timeout and tick to become leader
+        clock.advance(500);
+        raftNode.tick();
 
         KvServiceImpl kvService = new KvServiceImpl(kvStore, shardRouter, raftNode);
 

@@ -12,6 +12,7 @@ dependencies {
     implementation "io.grpc:grpc-netty-shaded:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
     implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
 
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"

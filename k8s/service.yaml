@@ -1,0 +1,38 @@
+---
+# Headless service for stable pod DNS (used by StatefulSet pods to find peers)
+apiVersion: v1
+kind: Service
+metadata:
+  name: raftkv-headless
+  namespace: raftkv
+  labels:
+    app: raftkv
+spec:
+  clusterIP: None
+  selector:
+    app: raftkv
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+
+---
+# Client-facing service (NodePort for external access from healthcheck script)
+apiVersion: v1
+kind: Service
+metadata:
+  name: raftkv
+  namespace: raftkv
+  labels:
+    app: raftkv
+spec:
+  type: NodePort
+  selector:
+    app: raftkv
+  ports:
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+      nodePort: 30090
+      protocol: TCP

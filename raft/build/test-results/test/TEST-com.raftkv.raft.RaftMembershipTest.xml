@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.raft.RaftMembershipTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-04-11T20:25:11" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.023">
+  <properties/>
+  <testcase name="leaderAddsNewPeerViaJointConsensus()" classname="com.raftkv.raft.RaftMembershipTest" time="0.011"/>
+  <testcase name="jointPhaseRequiresBothQuorums()" classname="com.raftkv.raft.RaftMembershipTest" time="0.004"/>
+  <testcase name="leaderRemovesPeerViaJointConsensus()" classname="com.raftkv.raft.RaftMembershipTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

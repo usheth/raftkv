@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.store.ShardRouterTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-04-11T19:56:16" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.032">
+  <properties/>
+  <testcase name="unfencingVnode_allowsWriteThrough()" classname="com.raftkv.store.ShardRouterTest" time="0.004"/>
+  <testcase name="routeDefaultOverload_treatsAsRead()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="routeReturnsNotLeaderWithHint_whenOtherNodeIsLeader()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="routeReturnsOk_forWriteWhenNotFenced()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="clearLeader_causesNoHintResult()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="routeDoesNotReturnResharding_forReadOnFencedVnode()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="routeReturnsOk_whenLocalNodeIsLeader()" classname="com.raftkv.store.ShardRouterTest" time="0.002"/>
+  <testcase name="routeReturnsNotLeaderNoHint_whenLeaderUnknown()" classname="com.raftkv.store.ShardRouterTest" time="0.001"/>
+  <testcase name="routeReturnsResharding_whenVnodeIsFencedAndRequestIsWrite()" classname="com.raftkv.store.ShardRouterTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

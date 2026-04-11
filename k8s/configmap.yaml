@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: raftkv-config
+  namespace: raftkv
+data:
+  RAFTKV_PORT: "9090"
+  RAFTKV_SHARD_COUNT: "3"
+  RAFTKV_DATA_DIR: "/data/raft"
+  # Peers are set per-pod via the StatefulSet using the headless service DNS names.
+  # Each pod reads its own node ID from RAFTKV_NODE_ID (set via fieldRef).
+  # RAFTKV_PEERS lists the OTHER two nodes; computed per-pod in the StatefulSet env.
+  RAFTKV_PEERS_ALL: "node-0=raftkv-0.raftkv-headless.raftkv.svc.cluster.local:9090,node-1=raftkv-1.raftkv-headless.raftkv.svc.cluster.local:9090,node-2=raftkv-2.raftkv-headless.raftkv.svc.cluster.local:9090"

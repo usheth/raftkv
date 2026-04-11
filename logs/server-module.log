@@ -1,0 +1,27 @@
+> Task :core:compileJava
+> Task :core:processResources NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+> Task :proto:compileJava
+> Task :proto:extractProto
+> Task :proto:processResources
+> Task :proto:classes
+> Task :proto:jar
+> Task :raft:compileJava
+> Task :raft:processResources NO-SOURCE
+> Task :raft:classes
+> Task :raft:jar
+> Task :store:compileJava
+> Task :server:compileJava
+> Task :server:processResources NO-SOURCE
+> Task :server:classes
+> Task :server:compileTestJava
+> Task :server:processTestResources NO-SOURCE
+> Task :server:testClasses
+> Task :store:processResources NO-SOURCE
+> Task :store:classes
+> Task :store:jar
+> Task :server:test
+
+BUILD SUCCESSFUL in 7s
+13 actionable tasks: 13 executed

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.raftkv.raft.RaftLeaderElectionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-04-08T03:51:49" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.057">
+<testsuite name="com.raftkv.raft.RaftLeaderElectionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-04-11T20:25:11" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.087">
   <properties/>
-  <testcase name="singleNodeElectsItself()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.036"/>
+  <testcase name="singleNodeElectsItself()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.059"/>
   <testcase name="splitVoteResolvesWithHigherTerm()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.009"/>
-  <testcase name="threeNodeElection()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.003"/>
-  <testcase name="candidateRevertsOnHigherTermResponse()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.004"/>
+  <testcase name="threeNodeElection()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.005"/>
+  <testcase name="candidateRevertsOnHigherTermResponse()" classname="com.raftkv.raft.RaftLeaderElectionTest" time="0.007"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

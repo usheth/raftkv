@@ -1,7 +1,14 @@
 # Pipeline Progress
 
+## Deployment
+- Started: 2026-04-11 13:16:47.717
+
 ## Test harness
 - Started: 2026-04-11 13:03:50.635
+- Review: APPROVED after 1 round(s)
+- Deployment 1: PASS — all 5 integration tests green (ElectionSpec 3/3, ReplicationSpec 2/2), full build successful
+- Completed: 2026-04-11 13:16:47.717
+- Time taken: 777082ms
 
 ## Server module
 - Started: 2026-04-11 12:56:30.284

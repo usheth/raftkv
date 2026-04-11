@@ -1,0 +1,14 @@
+> Task :core:compileJava
+> Task :core:processResources NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+> Task :raft:compileJava
+> Task :raft:processResources NO-SOURCE
+> Task :raft:classes
+> Task :raft:compileTestJava
+> Task :raft:processTestResources NO-SOURCE
+> Task :raft:testClasses
+> Task :raft:test
+
+BUILD SUCCESSFUL in 3s
+5 actionable tasks: 5 executed

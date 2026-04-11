@@ -55,9 +55,11 @@ public class KvServiceImpl extends KvServiceGrpc.KvServiceImplBase {
                     .setLeaderHint(hint)
                     .build();
         } else {
-            // RoutingResult.Ok — this node is the leader
+            // RoutingResult.Ok — this node is the leader; replicate via Raft log
             String value = request.getValue().toStringUtf8();
-            kvStore.put(key, value);
+            byte[] command = ("PUT " + key + "=" + value)
+                    .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            raftNode.appendEntry(command);
             response = PutResponse.newBuilder()
                     .setStatus(Status.OK)
                     .build();
@@ -70,28 +72,19 @@ public class KvServiceImpl extends KvServiceGrpc.KvServiceImplBase {
     @Override
     public void get(GetRequest request, StreamObserver<GetResponse> responseObserver) {
         String key = request.getKey();
-        RoutingResult routing = shardRouter.route(key, false);
-
+        // Reads are served locally from any node (stale-read semantics acceptable).
+        // No leadership check — followers hold replicated committed state.
+        Optional<String> value = kvStore.get(key);
         GetResponse response;
-        if (routing instanceof RoutingResult.NotLeader notLeader) {
-            String hint = notLeader.hint().map(Object::toString).orElse("");
+        if (value.isPresent()) {
             response = GetResponse.newBuilder()
-                    .setStatus(Status.NOT_LEADER)
-                    .setLeaderHint(hint)
+                    .setStatus(Status.OK)
+                    .setValue(ByteString.copyFromUtf8(value.get()))
                     .build();
         } else {
-            // Ok or Resharding — attempt the read
-            Optional<String> value = kvStore.get(key);
-            if (value.isPresent()) {
-                response = GetResponse.newBuilder()
-                        .setStatus(Status.OK)
-                        .setValue(ByteString.copyFromUtf8(value.get()))
-                        .build();
-            } else {
-                response = GetResponse.newBuilder()
-                        .setStatus(Status.KEY_NOT_FOUND)
-                        .build();
-            }
+            response = GetResponse.newBuilder()
+                    .setStatus(Status.KEY_NOT_FOUND)
+                    .build();
         }
 
         responseObserver.onNext(response);
@@ -115,11 +108,12 @@ public class KvServiceImpl extends KvServiceGrpc.KvServiceImplBase {
                     .setLeaderHint(hint)
                     .build();
         } else {
-            // RoutingResult.Ok
-            boolean removed = kvStore.delete(key);
-            Status status = removed ? Status.OK : Status.KEY_NOT_FOUND;
+            // RoutingResult.Ok — this node is the leader; replicate via Raft log
+            byte[] command = ("DELETE " + key)
+                    .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            raftNode.appendEntry(command);
             response = DeleteResponse.newBuilder()
-                    .setStatus(status)
+                    .setStatus(Status.OK)
                     .build();
         }
 

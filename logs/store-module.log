@@ -1,0 +1,15 @@
+> Task :store:cleanTest
+> Task :core:compileJava UP-TO-DATE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :store:compileJava UP-TO-DATE
+> Task :store:processResources NO-SOURCE
+> Task :store:classes UP-TO-DATE
+> Task :store:compileTestJava UP-TO-DATE
+> Task :store:processTestResources NO-SOURCE
+> Task :store:testClasses UP-TO-DATE
+> Task :store:test
+
+BUILD SUCCESSFUL in 2s
+6 actionable tasks: 2 executed, 4 up-to-date

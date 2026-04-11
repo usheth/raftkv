@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.store.KVStoreTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-04-11T19:56:16" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.023">
+  <properties/>
+  <testcase name="getReturnsEmptyForMissingKey()" classname="com.raftkv.store.KVStoreTest" time="0.005"/>
+  <testcase name="deleteReturnsFalseForAbsentKey()" classname="com.raftkv.store.KVStoreTest" time="0.001"/>
+  <testcase name="fencingDoesNotAffectOtherVnodes()" classname="com.raftkv.store.KVStoreTest" time="0.002"/>
+  <testcase name="putOverwritesExistingValue()" classname="com.raftkv.store.KVStoreTest" time="0.001"/>
+  <testcase name="multipleVnodesCanBeFencedIndependently()" classname="com.raftkv.store.KVStoreTest" time="0.002"/>
+  <testcase name="deleteRemovesKey()" classname="com.raftkv.store.KVStoreTest" time="0.001"/>
+  <testcase name="putAndGetRoundTrip()" classname="com.raftkv.store.KVStoreTest" time="0.001"/>
+  <testcase name="fenceAndUnfenceVnode()" classname="com.raftkv.store.KVStoreTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

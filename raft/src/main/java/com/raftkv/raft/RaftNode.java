@@ -192,6 +192,9 @@ public final class RaftNode {
         for (NodeId peer : effectivePeers()) {
             replicateToPeer(peer);
         }
+        // In a single-node cluster (or when the leader already has a quorum)
+        // advance commitIndex immediately since the leader counts as having the entry.
+        advanceCommitIndex();
     }
 
     // -------------------------------------------------------------------------

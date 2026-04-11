@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: raftkv
+  namespace: raftkv
+spec:
+  serviceName: raftkv-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: raftkv
+  template:
+    metadata:
+      labels:
+        app: raftkv
+    spec:
+      initContainers:
+        # Compute RAFTKV_NODE_ID and RAFTKV_PEERS from pod ordinal and write to /config/env
+        - name: init-config
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              POD_INDEX=$(echo "$POD_NAME" | sed 's/raftkv-//')
+              NODE_ID="node-${POD_INDEX}"
+              ALL="node-0=raftkv-0.raftkv-headless.raftkv.svc.cluster.local:9090,node-1=raftkv-1.raftkv-headless.raftkv.svc.cluster.local:9090,node-2=raftkv-2.raftkv-headless.raftkv.svc.cluster.local:9090"
+              # Remove self from peer list
+              PEERS=$(echo "$ALL" | tr ',' '\n' | grep -v "^${NODE_ID}=" | tr '\n' ',' | sed 's/,$//')
+              echo "export RAFTKV_NODE_ID=${NODE_ID}" > /config/env
+              echo "export RAFTKV_PEERS=${PEERS}" >> /config/env
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+
+      containers:
+        - name: raftkv
+          image: raftkv:dev
+          imagePullPolicy: Never
+          command:
+            - sh
+            - -c
+            - |
+              . /config/env
+              exec java -jar /app/server.jar
+          ports:
+            - containerPort: 9090
+              name: grpc
+          env:
+            - name: RAFTKV_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: raftkv-config
+                  key: RAFTKV_PORT
+            - name: RAFTKV_SHARD_COUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: raftkv-config
+                  key: RAFTKV_SHARD_COUNT
+            - name: RAFTKV_DATA_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: raftkv-config
+                  key: RAFTKV_DATA_DIR
+          volumeMounts:
+            - name: raft-data
+              mountPath: /data/raft
+            - name: config-volume
+              mountPath: /config
+          readinessProbe:
+            tcpSocket:
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 9090
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+      volumes:
+        - name: config-volume
+          emptyDir: {}
+
+  volumeClaimTemplates:
+    - metadata:
+        name: raft-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

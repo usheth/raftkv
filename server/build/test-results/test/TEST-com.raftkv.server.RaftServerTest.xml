@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.server.RaftServerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-04-11T20:28:26" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.049">
+  <properties/>
+  <testcase name="serverStartsAndBindsToEphemeralPort()" classname="com.raftkv.server.RaftServerTest" time="0.04"/>
+  <testcase name="serverGetPortReturnsDifferentPortsForDifferentInstances()" classname="com.raftkv.server.RaftServerTest" time="0.008"/>
+  <system-out><![CDATA[13:28:26.883 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer started on port 44731
+13:28:26.888 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer stopped
+13:28:26.895 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer started on port 39925
+13:28:26.897 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer started on port 46875
+13:28:26.898 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer stopped
+13:28:26.898 [Test worker] INFO com.raftkv.server.RaftServer -- RaftServer stopped
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

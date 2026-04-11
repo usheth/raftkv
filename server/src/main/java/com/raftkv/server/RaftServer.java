@@ -3,6 +3,7 @@ package com.raftkv.server;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,7 @@ public class RaftServer {
         for (BindableService svc : services) {
             builder.addService(svc);
         }
+        builder.addService(ProtoReflectionService.newInstance());
         server = builder.build().start();
         log.info("RaftServer started on port {}", server.getPort());
     }

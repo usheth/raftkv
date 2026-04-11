@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.raftkv.store.HashRingTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-04-11T19:56:16" hostname="utsavsheth-ZenBook-UX331FA-UX331FA" time="0.114">
+  <properties/>
+  <testcase name="getShard_iDeterministic_sameKeyAlwaysReturnsSameShard()" classname="com.raftkv.store.HashRingTest" time="0.044"/>
+  <testcase name="vnodesMappedTo256Slots_allAssigned()" classname="com.raftkv.store.HashRingTest" time="0.015"/>
+  <testcase name="removeShard_throwsIfLastShard()" classname="com.raftkv.store.HashRingTest" time="0.004"/>
+  <testcase name="differentKeys_mapToMixOfShards()" classname="com.raftkv.store.HashRingTest" time="0.007"/>
+  <testcase name="removeShard_redistributesVnodes()" classname="com.raftkv.store.HashRingTest" time="0.005"/>
+  <testcase name="addShard_redistributesVnodesEvenly()" classname="com.raftkv.store.HashRingTest" time="0.004"/>
+  <testcase name="addShard_throwsIfAlreadyPresent()" classname="com.raftkv.store.HashRingTest" time="0.002"/>
+  <testcase name="getVnode_isConsistentWithGetShard()" classname="com.raftkv.store.HashRingTest" time="0.001"/>
+  <testcase name="defaultVnodeCountIs256()" classname="com.raftkv.store.HashRingTest" time="0.002"/>
+  <testcase name="getVnode_isInRange()" classname="com.raftkv.store.HashRingTest" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
